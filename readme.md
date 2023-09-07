@@ -1,4 +1,4 @@
-# Global-Super-Store-Database
+# Global Super Store Database Design
 
 ## About the Project
 
