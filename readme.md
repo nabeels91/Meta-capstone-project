@@ -10,5 +10,5 @@ Global Super Store(GSS) store data about the orders which have been made by cust
 
 All those information is stored in ONLY ONE dataset. This makes the data difficult to monitor, analyze, and extract insights! Therefore we need a structured database to store all those information in a simple and easy-to-monitor format.
 
-(https://github.com/nabeels91/Meta-capstone-project/blob/main/xslx:CSV.png)
+![css file](https://github.com/nabeels91/Meta-capstone-project/blob/main/xslx:CSV.png)
 
