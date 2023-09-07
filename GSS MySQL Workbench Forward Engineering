@@ -1,0 +1,149 @@
+-- MySQL Workbench Forward Engineering
+
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
+
+-- -----------------------------------------------------
+-- Schema mydb
+-- -----------------------------------------------------
+-- -----------------------------------------------------
+-- Schema GSS
+-- -----------------------------------------------------
+
+-- -----------------------------------------------------
+-- Schema GSS
+-- -----------------------------------------------------
+CREATE SCHEMA IF NOT EXISTS `GSS` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci ;
+USE `GSS` ;
+
+-- -----------------------------------------------------
+-- Table `GSS`.`Customer`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `GSS`.`Customer` (
+  `CustomerID` INT NOT NULL,
+  `CustomerName` VARCHAR(100) NOT NULL,
+  `CustomerEmail` VARCHAR(45) NOT NULL,
+  `AddressID` INT NOT NULL,
+  `CustomerContactNUmber` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`CustomerID`, `CustomerContactNUmber`, `CustomerEmail`),
+  INDEX `Address_idx` (`AddressID` ASC) VISIBLE)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `GSS`.`Shipping`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `GSS`.`Shipping` (
+  `ShippingID` INT NOT NULL,
+  `ShippingDate` DATE NOT NULL,
+  `ShippingMode` VARCHAR(45) NOT NULL,
+  `Priority` VARCHAR(20) NOT NULL,
+  `ShippingCost` DECIMAL(2) NOT NULL,
+  PRIMARY KEY (`ShippingID`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `GSS`.`Product`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `GSS`.`Product` (
+  `ProductID` INT NOT NULL,
+  `Catagory` VARCHAR(45) NOT NULL,
+  `SubCatagory` VARCHAR(45) NOT NULL,
+  `ProductName` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`ProductID`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `GSS`.`Order`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `GSS`.`Order` (
+  `OrderID` INT NOT NULL,
+  `OrderDate` DATE NOT NULL,
+  `ProductID` INT NOT NULL,
+  `Quantity` INT NOT NULL,
+  `CustomerID` INT NOT NULL,
+  `ShippingID` INT NOT NULL,
+  PRIMARY KEY (`OrderID`),
+  INDEX `Customer_FK_idx` (`CustomerID` ASC) VISIBLE,
+  INDEX `Shipping_FK_idx` (`ShippingID` ASC) VISIBLE,
+  INDEX `Product_FK_idx` (`ProductID` ASC) VISIBLE,
+  CONSTRAINT `Customer_FK`
+    FOREIGN KEY (`CustomerID`)
+    REFERENCES `GSS`.`Customer` (`CustomerID`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `Shipping_FK`
+    FOREIGN KEY (`ShippingID`)
+    REFERENCES `GSS`.`Shipping` (`ShippingID`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `Product_FK`
+    FOREIGN KEY (`ProductID`)
+    REFERENCES `GSS`.`Product` (`ProductID`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `GSS`.`Address`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `GSS`.`Address` (
+  `AddressID` INT NOT NULL,
+  `Segment` VARCHAR(45) NULL,
+  `City` VARCHAR(45) NOT NULL,
+  `State` VARCHAR(45) NULL,
+  `Country` VARCHAR(45) NULL,
+  `PostalCode` VARCHAR(45) NOT NULL,
+  INDEX `Customer_idx_FK` (`AddressID` ASC) VISIBLE,
+  CONSTRAINT `Address_FK`
+    FOREIGN KEY (`AddressID`)
+    REFERENCES `GSS`.`Customer` (`AddressID`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `GSS`.`Sales`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `GSS`.`Sales` (
+  `SalesID` INT NOT NULL,
+  `SaleValue` DOUBLE NOT NULL,
+  `Discount` DOUBLE NOT NULL,
+  `ShippingCost` DOUBLE NOT NULL,
+  `OrderID` INT NOT NULL,
+  PRIMARY KEY (`SalesID`),
+  INDEX `Order_FK_idx` (`OrderID` ASC) VISIBLE,
+  CONSTRAINT `Order_FK`
+    FOREIGN KEY (`OrderID`)
+    REFERENCES `GSS`.`Order` (`OrderID`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `GSS`.`Cost`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `GSS`.`Cost` (
+  `CostID` INT NOT NULL,
+  `CostPrice` DECIMAL(5) NOT NULL,
+  `ProductID` INT NOT NULL,
+  `SellPrice` DECIMAL(5) NOT NULL,
+  PRIMARY KEY (`CostID`),
+  INDEX `Cost_FK_idx` (`ProductID` ASC) VISIBLE,
+  CONSTRAINT `Cost_FK`
+    FOREIGN KEY (`ProductID`)
+    REFERENCES `GSS`.`Product` (`ProductID`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
