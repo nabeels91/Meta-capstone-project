@@ -33,7 +33,7 @@ The logical and physical data model:
 the physical data model is basically a logical data model with all the gaps filled. All relationships foreign key connections and normalisation standards (up to normal form 3) are applied here
 
 My ERM:
-![erm](Screenshot 2023-09-06 at 23.02.04.png)
+![erm](https://github.com/nabeels91/Meta-capstone-project/blob/main/Screenshot%202023-09-06%20at%2023.02.04.png)
 
 
 
